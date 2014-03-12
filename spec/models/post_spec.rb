@@ -2,11 +2,9 @@ require 'spec_helper'
 
 describe Post do
   it "title should be automatically titleized before save" do
-    pending
   end
 
   it "post should be unpublished by default" do
-    pending
   end
 
   # a slug is an automaticaly generated url-friendly
