@@ -1,21 +1,7 @@
 class Admin::PostsController < ApplicationController
+  before_filter :authorize, only: :index
   def index
     @posts = Post.all
-  end
-
-  def new
-    @post = Post.new
-  end
-
-  def create
-    @post = Post.new(post_params)
-
-    if @post.save
-      flash[:notice] = "Post was successfully saved."
-      redirect_to admin_post_url(@post)
-    else
-      render :new
-    end
   end
 
   def show
@@ -36,11 +22,32 @@ class Admin::PostsController < ApplicationController
     end
   end
 
+  def new
+    @post = Post.new
+  end
+
+  def create
+    @post = Post.new(post_params)
+
+    if @post.save
+      flash[:notice] = "Post was successfully saved."
+      redirect_to admin_post_url(@post)
+    else
+      render new_admin_post_url
+    end
+  end
+
   def destroy
     post = Post.find(params[:destroy])
     post.destroy
 
     redirect_to admin_posts_url
+  end
+
+  def authorize
+    authenticate_or_request_with_http_basic do |user, pw|
+      user == 'geek' && pw == 'jock'
+    end
   end
 
   private
