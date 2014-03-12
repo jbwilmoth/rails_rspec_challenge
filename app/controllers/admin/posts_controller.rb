@@ -1,5 +1,6 @@
 class Admin::PostsController < ApplicationController
   before_filter :authorize, only: :index
+  
   def index
     @posts = Post.all
   end
@@ -44,15 +45,16 @@ class Admin::PostsController < ApplicationController
     redirect_to admin_posts_url
   end
 
-  def authorize
-    authenticate_or_request_with_http_basic do |user, pw|
-      user == 'geek' && pw == 'jock'
-    end
-  end
-
   private
 
   def post_params
     params.require(:post).permit(:title, :content, :is_published)
+  end
+
+  protected
+  def authorize
+    authenticate_or_request_with_http_basic do |user, pw|
+      user == 'geek' && pw == 'jock'
+    end
   end
 end
